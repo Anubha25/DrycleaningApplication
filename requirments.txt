@@ -1,0 +1,39 @@
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py
+
+pip install mysql-connector-python      # for connecting MYSQL to python
+
+
+
+
+{
+
+    "host": "127.0.0.1",
+
+    "user": "root", 
+
+    "password": "Anubhav25",
+
+    "database": "Drycleaning",
+
+    "port": 3306
+
+}
+create database Drycleaning;
+create table Customers(CustomerNo varchar(13) Primary key, Name varchar(30),Type varchar(15),Address varchar(50));
+
+CREATE TABLE Orders (
+    OrderId INT PRIMARY KEY AUTO_INCREMENT,
+    CustomerNo VARCHAR(13),
+    Total_Items INT,
+    Discount INT,
+    Amount INT,
+    Amount_with_GST INT,
+    Payment_Mode VARCHAR(10),
+    Received_Amount INT,
+    Pending_Amount INT,
+    Status VARCHAR(30) DEFAULT 'Received',
+    OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (CustomerNo) REFERENCES Customers(CustomerNo) ON UPDATE CASCADE ON DELETE CASCADE
+);
+create table Items(OrderId int,item varchar(20),price int,Quantity int,foreign key(OrderId) references orders(OrderId)on update cascade on delete cascade);
