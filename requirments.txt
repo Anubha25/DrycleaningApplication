@@ -2,8 +2,9 @@ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py
 
 pip install mysql-connector-python      # for connecting MYSQL to python
-
-
+pip install 
+pip install pdf2image
+pip install pywhatkit
 
 
 {
@@ -36,4 +37,11 @@ CREATE TABLE Orders (
     OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (CustomerNo) REFERENCES Customers(CustomerNo) ON UPDATE CASCADE ON DELETE CASCADE
 );
-create table Items(OrderId int,item varchar(20),price int,Quantity int,foreign key(OrderId) references orders(OrderId)on update cascade on delete cascade);
+create table Items(ItemId int primary key AUTO_INCREMENT,OrderId int,item varchar(20),price int,Quantity int,foreign key(OrderId) references orders(OrderId)on update cascade on delete cascade);
+
+
+
+mysqlconn=     (host="127.0.0.1",
+                user="root",
+                password="Anubhav25",
+                database="Drycleaning") 

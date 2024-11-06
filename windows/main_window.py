@@ -4,8 +4,9 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import os
 from windows.create_order import CreateOrderWindow
-from windows.fetch_order import FetchOrderWindow
-from windows.update_tables import UpdateTablesWindow
+from windows.view_order import viewOrderWindow
+from windows.update_tables import UpdateOrdersWindow
+from windows.Invoice import InvoiceOrder
 
 class MainWindow:
     def __init__(self):
@@ -114,8 +115,8 @@ class MainWindow:
         # Fetch Order Button
         fetch_btn = tk.Button(
             buttons_frame,
-            text="Fetch Order Details",
-            command=self.open_fetch_order,
+            text="View Orders ",
+            command=self.open_view_order,
             bg='#FFFFE0',  # Light Yellow
             **button_style
         )
@@ -128,7 +129,7 @@ class MainWindow:
         # Update Tables Button
         update_btn = tk.Button(
             buttons_frame,
-            text="Update Tables",
+            text="Update Orders",
             command=self.open_update_tables,
             bg='#FFB6C1',  # Light Pink
             **button_style
@@ -139,14 +140,30 @@ class MainWindow:
         update_btn.bind("<Enter>", on_enter)
         update_btn.bind("<Leave>", on_leave)
 
+        #invoice button
+        invoice_btn = tk.Button(
+            buttons_frame,
+            text="Invoice Order",
+            command=self.open_Invoice_Order,
+            bg='#FFB6d3',  
+            **button_style
+        )
+        invoice_btn.default_color = '#FFB6C1'
+        invoice_btn.hover_color = '#EFA6B1'
+        invoice_btn.pack(pady=10)
+        invoice_btn.bind("<Enter>", on_enter)
+        invoice_btn.bind("<Leave>", on_leave)
+
     def open_create_order(self):
         CreateOrderWindow(self.root)
 
-    def open_fetch_order(self):
-        FetchOrderWindow(self.root)
+    def open_view_order(self):
+        viewOrderWindow(self.root)
 
     def open_update_tables(self):
-        UpdateTablesWindow(self.root)
+        UpdateOrdersWindow(self.root)
+    def open_Invoice_Order(self):
+        InvoiceOrder(self.root)
 
     def run(self):
         self.root.mainloop()

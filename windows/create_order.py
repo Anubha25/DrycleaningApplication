@@ -55,7 +55,7 @@ class CreateOrderWindow:
         ttk.Label(main_frame, text="Create New Order", 
                  font=('Helvetica', 14, 'bold')).grid(row=0, column=0, columnspan=4, pady=10)
         
-        headers = ["Item", "Quantity", "Price"]
+        headers = ["Item", "Quantity", "Price Per Unit"]
         for i, header in enumerate(headers):
             ttk.Label(main_frame, text=header, 
                      font=('Helvetica', 10, 'bold')).grid(row=1, column=i, padx=5)
