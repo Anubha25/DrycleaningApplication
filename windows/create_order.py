@@ -101,13 +101,16 @@ class CreateOrderWindow:
         self.customer_no.grid(row=0, column=0, padx=5)
         ttk.Label(customer_frame, text="Customer No").grid(row=1, column=0, padx=5)
         
+        self.fetch_customer_btn = ttk.Button(customer_frame, text="Fetch", command=self.fetch_customer_data)
+        self.fetch_customer_btn.grid(row=0, column=1, padx=5)
+        
         self.customer_name = ttk.Entry(customer_frame)
-        self.customer_name.grid(row=0, column=1, padx=5)
-        ttk.Label(customer_frame, text="Customer Name").grid(row=1, column=1, padx=5)
+        self.customer_name.grid(row=0, column=2, padx=5)
+        ttk.Label(customer_frame, text="Customer Name").grid(row=1, column=2, padx=5)
         
         self.customer_type = ttk.Combobox(customer_frame, values=["Customer", "Vendor"])
-        self.customer_type.grid(row=0, column=2, padx=5)
-        ttk.Label(customer_frame, text="Type").grid(row=1, column=2, padx=5)
+        self.customer_type.grid(row=0, column=3, padx=5)
+        ttk.Label(customer_frame, text="Type").grid(row=1, column=3, padx=5)
         
         # Address section
         ttk.Label(main_frame, text="Address:").grid(row=9, column=0, pady=5)
@@ -120,12 +123,11 @@ class CreateOrderWindow:
         payment_frame.grid(row=10, column=0, columnspan=4, pady=10)
         
         # Payment Mode
-        self.payment_mode_btn = ttk.Button(payment_frame, text="Payment Mode", 
-                                         command=self.set_payment_mode)
-        self.payment_mode_btn.grid(row=0, column=0, padx=5)
         self.payment_mode_var = tk.StringVar()
-        self.payment_mode_label = ttk.Label(payment_frame, textvariable=self.payment_mode_var)
-        self.payment_mode_label.grid(row=1, column=0, padx=5)
+        self.payment_mode_dropdown = ttk.Combobox(payment_frame, textvariable=self.payment_mode_var, 
+                                                 values=["Cash","Card","UPI","Others"])
+        self.payment_mode_dropdown.grid(row=0, column=0, padx=5)
+        ttk.Label(payment_frame, text="Payment Mode").grid(row=1, column=0, padx=5)
         
         # Advance Payment
         self.advance_btn = ttk.Button(payment_frame, text="Advance", 
@@ -145,6 +147,37 @@ class CreateOrderWindow:
         """Set up the save button."""
         save_btn = ttk.Button(main_frame, text="Save", command=self.save_order)
         save_btn.grid(row=11, column=0, columnspan=4, pady=20)
+
+    def fetch_customer_data(self):
+        """Fetch customer data from the database based on the Customer No."""
+        customer_no = self.customer_no.get().strip()
+        if not customer_no:
+            messagebox.showerror("Error", "Please enter a Customer No.")
+            return
+
+        try:
+            # Connect to the database
+            conn = mysql.connector.connect(**self.db_config)
+            cursor = conn.cursor()
+
+            # Execute the SELECT query
+            cursor.execute("SELECT Name, Type, Address FROM Customers WHERE CustomerNo = %s", (customer_no,))
+            result = cursor.fetchone()
+
+            if result:
+                self.customer_name.delete(0, tk.END)
+                self.customer_name.insert(0, result[0])
+                self.customer_type.set(result[1])
+                self.address_entry.delete(0, tk.END)
+                self.address_entry.insert(0, result[2])
+            else:
+                messagebox.showerror("Error", "No customer found with the given Customer No.")
+
+        except mysql.connector.Error as err:
+            messagebox.showerror("Database Error", f"Error: {err}")
+        finally:
+            cursor.close()
+            conn.close()
 
     def set_payment_mode(self):
         """Handle payment mode input via dialog."""
