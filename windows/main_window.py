@@ -7,6 +7,7 @@ from windows.create_order import CreateOrderWindow
 from windows.view_order import viewOrderWindow
 from windows.update_tables import UpdateOrdersWindow
 from windows.Invoice import InvoiceOrder
+from windows.today_order_history import TodayOrderHistoryWindow
 
 class MainWindow:
     def __init__(self):
@@ -140,7 +141,7 @@ class MainWindow:
         update_btn.bind("<Enter>", on_enter)
         update_btn.bind("<Leave>", on_leave)
 
-        #invoice button
+        # Invoice Button
         invoice_btn = tk.Button(
             buttons_frame,
             text="Invoice Order",
@@ -154,6 +155,20 @@ class MainWindow:
         invoice_btn.bind("<Enter>", on_enter)
         invoice_btn.bind("<Leave>", on_leave)
 
+        # Today's Order History Button
+        today_order_history_btn = tk.Button(
+            buttons_frame,
+            text="Today's Order History",
+            command=self.open_today_order_history,
+            bg='#90EE90',  # Light Green
+            **button_style
+        )
+        today_order_history_btn.default_color = '#90EE90'
+        today_order_history_btn.hover_color = '#80DE80'
+        today_order_history_btn.pack(pady=10)
+        today_order_history_btn.bind("<Enter>", on_enter)
+        today_order_history_btn.bind("<Leave>", on_leave)
+
     def open_create_order(self):
         CreateOrderWindow(self.root)
 
@@ -162,8 +177,12 @@ class MainWindow:
 
     def open_update_tables(self):
         UpdateOrdersWindow(self.root)
+
     def open_Invoice_Order(self):
         InvoiceOrder(self.root)
+
+    def open_today_order_history(self):
+        TodayOrderHistoryWindow(self.root)
 
     def run(self):
         self.root.mainloop()
